@@ -9,6 +9,11 @@ import Foundation
 protocol TeamsListSceneFactory {
     func buildTeamListScene() -> TeamListViewController
 }
+
+protocol TeamsDetailSceneFactory {
+    func buildTeamDetailScene(teamName: String) -> TeamDetailViewController
+}
+
 final class CompositionRoot {
     let dependencies = AppDependencies()
 }
@@ -23,4 +28,12 @@ extension CompositionRoot: TeamsListSceneFactory {
     }
 }
 
-
+extension CompositionRoot: TeamsDetailSceneFactory {
+    func buildTeamDetailScene(teamName: String) -> TeamDetailViewController {
+        let interactor = TeamDetailInteractor(dependencies: dependencies)
+        let viewModel = TeamDetailViewModel(interactor: interactor, teamName:teamName)
+        let router = TeamDetailRouter(sceneFactory: self)
+        let vc = TeamDetailViewController(viewModel: viewModel, router: router)
+        return vc
+    }
+}

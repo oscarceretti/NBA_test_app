@@ -15,7 +15,7 @@ final class TeamListInteractor: TeamListInteractorInterface {
     
     typealias Dependencies = HasNetworkManager & HasNBAManager & HasPersistenceManager
     let dependencies: Dependencies
-    private var totalCount: Int? = nil
+    
     init (dependencies: Dependencies) {
         self.dependencies = dependencies
     }

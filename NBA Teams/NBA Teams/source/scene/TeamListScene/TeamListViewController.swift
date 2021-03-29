@@ -9,7 +9,7 @@ import Foundation
 import UIKit
 
 
-class TeamListViewController: UIViewController, UITableViewDelegate {
+class TeamListViewController: UIViewController {
     
     private let viewModel: TeamLstViewModel
     private let router: TeamListRouter
@@ -17,7 +17,6 @@ class TeamListViewController: UIViewController, UITableViewDelegate {
     private var mainView = TeamListView(frame: .zero)
     
     
-    private let cellID = "TeamListCell__"
     private var activityIndicator = UIActivityIndicatorView(style: .medium) {
         didSet {
             activityIndicator.backgroundColor = .systemBlue

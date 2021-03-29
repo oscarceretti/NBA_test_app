@@ -13,20 +13,16 @@ protocol TeamListRouterProtocol {
 final class TeamListRouter: TeamListRouterProtocol {
     
     func openTeamDetail(from: UIViewController, teamName: String) {
-        debugPrint(teamName)
+        let vc = self.sceneFactory.buildTeamDetailScene(teamName: teamName)
+        from.navigationController?.pushViewController(vc, animated: true)
     }
     
-    typealias SceneFactory = TeamsListSceneFactory
+    typealias SceneFactory = TeamsDetailSceneFactory
     let sceneFactory: SceneFactory
     
     init(sceneFactory: SceneFactory){
         self.sceneFactory = sceneFactory
     }
-    
-    func openTeamDetail(from: UIViewController) {
-        
-    }
-    
     
 }
 

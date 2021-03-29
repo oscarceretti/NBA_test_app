@@ -12,7 +12,7 @@ protocol HasPersistenceManager {
 
 protocol PeristenceManagerProtocol {
     func save(_ list: [TeamElement], title: String) throws
-    func load(title: String) throws -> TeamElement
+    func load(title: String) throws -> [TeamElement]
 }
 class PeristenceManager: NSObject, PeristenceManagerProtocol{
 
@@ -25,9 +25,9 @@ class PeristenceManager: NSObject, PeristenceManagerProtocol{
         userDefaults.set(data, forKey: title)
     }
     
-    func load(title: String) throws -> TeamElement {
+    func load(title: String) throws -> [TeamElement] {
         guard let data = userDefaults.data(forKey: title),
-              let game = try? decoder.decode(TeamElement.self, from: data)
+              let game = try? decoder.decode([TeamElement].self, from: data)
         else {
             throw Error.listNotFound
         }

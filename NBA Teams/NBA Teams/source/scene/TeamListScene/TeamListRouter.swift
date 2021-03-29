@@ -8,13 +8,13 @@
 import Foundation
 import UIKit
 protocol TeamListRouterProtocol {
-    func openTeamDetail(from: UIViewController)
+    func openTeamDetail(from: UIViewController, teamName: String)
 }
 final class TeamListRouter: TeamListRouterProtocol {
     
-
-    
-
+    func openTeamDetail(from: UIViewController, teamName: String) {
+        debugPrint(teamName)
+    }
     
     typealias SceneFactory = TeamsListSceneFactory
     let sceneFactory: SceneFactory

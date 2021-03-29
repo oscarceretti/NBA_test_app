@@ -15,4 +15,8 @@ struct Constants {
         "x-rapidapi-key": "c86000c9aamsh6401e61dbd97a39p10e98cjsne09e321b9211",
         "x-rapidapi-host": "free-nba.p.rapidapi.com"
     ]
+    
+    struct userDefaults {
+       static let LIST_KEY = "teams_list"
+    }
 }

@@ -13,9 +13,8 @@ protocol TeamListInteractorInterface {
 
 final class TeamListInteractor: TeamListInteractorInterface {
     
-    typealias Dependencies = HasNetworkManager & HasNBAManager
+    typealias Dependencies = HasNetworkManager & HasNBAManager & HasPersistenceManager
     let dependencies: Dependencies
-    
     private var totalCount: Int? = nil
     init (dependencies: Dependencies) {
         self.dependencies = dependencies
@@ -33,16 +32,23 @@ final class TeamListInteractor: TeamListInteractorInterface {
                     switch teamsResult {
                     
                     case .success(let teams):
+                        
+                        do {
+                            try self.dependencies.persistenceManager.save(teams.data, title: Constants.userDefaults.LIST_KEY)
+                        }catch {
+                            completion(.failure(error))
+                        }
+                        
                         completion(.success(teams.data.map { return $0.fullName }))
+                        
                     case .failure(let error):
                         completion(.failure(error))
+                        
                     }
                 }, onComplete: onComplete)
                 
             case .failure(let error):
-                onStart()
                 completion(.failure(error))
-                onComplete()
             }
         }
     }

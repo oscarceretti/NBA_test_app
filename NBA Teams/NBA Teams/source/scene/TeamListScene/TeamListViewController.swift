@@ -13,13 +13,10 @@ class TeamListViewController: UIViewController, UITableViewDelegate {
     
     private let viewModel: TeamLstViewModel
     private let router: TeamListRouter
-    private var dataSource: [String] = []
+   
+    private var mainView = TeamListView(frame: .zero)
     
-    private var teamList = UITableView() {
-        didSet {
-            teamList.backgroundColor = .white
-        }
-    }
+    
     private let cellID = "TeamListCell__"
     private var activityIndicator = UIActivityIndicatorView(style: .medium) {
         didSet {
@@ -33,6 +30,7 @@ class TeamListViewController: UIViewController, UITableViewDelegate {
         self.viewModel = viewModel
         self.router = router
         super.init(nibName: nil, bundle: nil)
+        self.mainView.viewDelegate = self
         setLayout()
     }
     
@@ -41,24 +39,20 @@ class TeamListViewController: UIViewController, UITableViewDelegate {
     }
     
     override func viewDidLoad() {
-        setupTableView()
         super.viewDidLoad()
         callToViewModelForUIUpdate()
         self.viewModel.callFuncToGetTeamsList()
         self.title = "Lista"
     }
     
-    func setupTableView() {
-        teamList.delegate = self
-        teamList.dataSource = self
-        teamList.register(UITableViewCell.self, forCellReuseIdentifier: cellID)
-    }
+    
+    
     func callToViewModelForUIUpdate() {
         
         self.viewModel.bindTeamsViewModelToController = { [weak self] teams in
-            self?.dataSource = teams
+            self?.mainView.datasource = teams
             DispatchQueue.main.async {
-                self?.teamList.reloadData()
+                self?.mainView.reloadData()
             }
         }
         
@@ -89,13 +83,13 @@ class TeamListViewController: UIViewController, UITableViewDelegate {
     func setLayout() {
         self.view.backgroundColor = .white
         
-        view.addSubview(teamList)
-        teamList.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(mainView)
+        mainView.translatesAutoresizingMaskIntoConstraints = false
         let tableConstraints = [
-            teamList.topAnchor.constraint(equalTo: view.topAnchor),
-            teamList.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            teamList.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            teamList.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+            mainView.topAnchor.constraint(equalTo: view.topAnchor),
+            mainView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            mainView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            mainView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
         ]
         NSLayoutConstraint.activate(tableConstraints)
         
@@ -113,16 +107,10 @@ class TeamListViewController: UIViewController, UITableViewDelegate {
 }
 
 
-extension TeamListViewController: UITableViewDataSource {
+extension TeamListViewController: TeamListViewDelegate {
     
-  func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-    return dataSource.count
-  }
-    
-  func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-    let cell = tableView.dequeueReusableCell(withIdentifier: cellID, for: indexPath)
-    cell.textLabel?.text = dataSource[indexPath.row]
-    return cell
-  }
+    func openTeamDetail(teamName: String) {
+        self.router.openTeamDetail(from: self, teamName: teamName)
+    }
     
 }

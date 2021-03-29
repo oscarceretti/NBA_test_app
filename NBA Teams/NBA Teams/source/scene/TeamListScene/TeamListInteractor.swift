@@ -8,11 +8,12 @@
 import Foundation
 
 protocol TeamListInteractorInterface {
-   
+   func getTeamsList(onStart: @escaping() -> (), completion: @escaping(Result<[String]>) -> (), onComplete: @escaping() -> ())
 }
 
 final class TeamListInteractor: TeamListInteractorInterface {
-    typealias Dependencies = HasNBAManager
+    
+    typealias Dependencies = HasNetworkManager & HasNBAManager
     let dependencies: Dependencies
     
     private var totalCount: Int? = nil
@@ -22,7 +23,29 @@ final class TeamListInteractor: TeamListInteractorInterface {
     
     deinit{}
     
-
+    func getTeamsList(onStart: @escaping () -> (), completion: @escaping (Result<[String]>) -> (), onComplete: @escaping () -> ()) {
+        self.dependencies.networkManager.testNetwork() { (result) in
+            switch result {
+            
+            case .success():
+                
+                self.dependencies.nbaManager.getTeamList(onStart: onStart, completion: { (teamsResult) in
+                    switch teamsResult {
+                    
+                    case .success(let teams):
+                        completion(.success(teams.data.map { return $0.fullName }))
+                    case .failure(let error):
+                        completion(.failure(error))
+                    }
+                }, onComplete: onComplete)
+                
+            case .failure(let error):
+                onStart()
+                completion(.failure(error))
+                onComplete()
+            }
+        }
+    }
     
     
 }

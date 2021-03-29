@@ -7,6 +7,7 @@
 
 import Foundation
 
-final class AppDependencies: HasNBAManager {
+final class AppDependencies: HasNBAManager, HasNetworkManager {
     lazy var nbaManager: NBAManagerProtocol = NBAManager()
+    lazy var networkManager: NetworkManagerProtocol = NetworkManager()
 }

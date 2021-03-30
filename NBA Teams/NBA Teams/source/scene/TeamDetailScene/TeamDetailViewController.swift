@@ -29,6 +29,7 @@ class TeamDetailViewController: UIViewController {
         self.viewModel = viewModel
         self.router = router
         super.init(nibName: nil, bundle: nil)
+        self.mainView.viewDelegate = self
         setLayout()
     }
     
@@ -39,15 +40,13 @@ class TeamDetailViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         callToViewModelForUIUpdate()
-        self.title = "Team"
+        self.title = self.viewModel.teamName
+        self.viewModel.requestPlayersList()
     }
     
     
     
     func callToViewModelForUIUpdate() {
-        
-
-        
         
         self.viewModel.bindErrorViewModelToController = { [weak self] error in
             DispatchQueue.main.async {
@@ -69,7 +68,12 @@ class TeamDetailViewController: UIViewController {
                 }
             }
         }
-        
+        self.viewModel.bindPlayersViewModelToController = { [weak self] players in
+            self?.mainView.datasource.append(contentsOf: players)
+            DispatchQueue.main.async {
+                self?.mainView.reloadData()
+            }
+        }
     }
     
     func setLayout() {
@@ -98,4 +102,15 @@ class TeamDetailViewController: UIViewController {
     
 }
 
+extension TeamDetailViewController: TeamDetailViewDelegate {
+    func openPlayerDetail(playerName: String) {
+        debugPrint(playerName)
+    }
+    
+    func askForMore() {
+        self.viewModel.requestPlayersList()
+    }
+    
+    
+}
 

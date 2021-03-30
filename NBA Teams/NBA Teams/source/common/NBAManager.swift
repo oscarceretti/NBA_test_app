@@ -18,10 +18,14 @@ protocol HasNBAManager {
 
 protocol NBAManagerProtocol {
     func getTeamList(onStart: @escaping() -> (), completion: @escaping(Result<Teams>) -> (), onComplete: @escaping() -> ())
+    func getPLayerList(page: Int, onStart: @escaping() -> (), completion: @escaping(Result<PlayersContainer>) -> (), onComplete: @escaping() -> ())
 }
 class NBAManager: NSObject, NBAManagerProtocol{
     
-
+    override init() {
+        super.init()
+    }
+    
     func getTeamList(onStart: @escaping () -> (), completion: @escaping (Result<Teams>) -> (), onComplete: @escaping () -> ()) {
         onStart()
         
@@ -50,9 +54,31 @@ class NBAManager: NSObject, NBAManagerProtocol{
     }
     
 
-    override init() {
-        super.init()
+    func getPLayerList(page: Int,onStart: @escaping () -> (), completion: @escaping (Result<PlayersContainer>) -> (), onComplete: @escaping () -> ()) {
+        onStart()
         
+        let request = NSMutableURLRequest(url: NSURL(string: "https://free-nba.p.rapidapi.com/players?page=\(page)&per_page=100")! as URL,
+                                                cachePolicy: .useProtocolCachePolicy,
+                                            timeoutInterval: 10.0)
+        request.httpMethod = "GET"
+        request.allHTTPHeaderFields = Constants.headers
+
+        let session = URLSession.shared
+        let dataTask = session.dataTask(with: request as URLRequest, completionHandler: { (data, response, error) -> Void in
+            onComplete()
+            do {
+                if let data = data {
+                    let jsonDecoder = JSONDecoder()
+                    let players = try jsonDecoder.decode(PlayersContainer.self, from: data)
+                    completion(.success(players))
+                }else {
+                    completion(.failure(error!))
+                }
+            }catch {
+                completion(.failure(error))
+            }
+        })
+        dataTask.resume()
     }
     
     

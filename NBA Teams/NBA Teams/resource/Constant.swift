@@ -17,6 +17,7 @@ struct Constants {
     ]
     
     struct userDefaults {
-       static let LIST_KEY = "teams_list"
+        static let LIST_KEY = "teams_list"
+        static let PLAYERS_KEY = "players_key"
     }
 }

@@ -34,7 +34,7 @@ final class TeamListInteractor: TeamListInteractorInterface {
                     case .success(let teams):
                         
                         do {
-                            try self.dependencies.persistenceManager.save(teams.data, title: Constants.userDefaults.LIST_KEY)
+                            try self.dependencies.persistenceManager.saveTeams(teams.data)
                         }catch {
                             completion(.failure(error))
                         }

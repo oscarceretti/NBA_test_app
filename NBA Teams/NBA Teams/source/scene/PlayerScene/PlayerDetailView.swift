@@ -1,20 +1,19 @@
 //
-//  TeamListView.swift
+//  PlayerDetailView.swift
 //  NBA Teams
 //
-//  Created by Oscar Ceretti on 29/03/2021.
+//  Created by Oscar Ceretti on 30/03/2021.
 //
 
 import Foundation
 import UIKit
-protocol TeamListViewDelegate: class {
-    func openTeamDetail(teamName: String)
-}
 
-class TeamListView: UITableView,UITableViewDataSource, UITableViewDelegate {
+
+
+class PlayerDetailView: UITableView,UITableViewDataSource, UITableViewDelegate {
     
-    private let cellID = "TeamListCell__"
-    var viewDelegate: TeamListViewDelegate?
+    private let cellID = "PlayerDetailCell__"
+    
     var datasource: [String] = []
     override init(frame: CGRect, style: UITableView.Style) {
         super.init(frame: frame,style: style)
@@ -45,7 +44,4 @@ class TeamListView: UITableView,UITableViewDataSource, UITableViewDelegate {
         return cell
     }
     
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        self.viewDelegate?.openTeamDetail(teamName: datasource[indexPath.row])
-    }
 }

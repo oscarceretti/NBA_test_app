@@ -8,8 +8,6 @@
 import Foundation
 import UIKit
 
-import Foundation
-import UIKit
 protocol TeamDetailViewDelegate: class {
     func openPlayerDetail(playerName: String)
     func askForMore()
@@ -43,6 +41,9 @@ class TeamDetailView: UITableView,UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: cellID, for: indexPath)
         cell.textLabel?.text = datasource[indexPath.row]
+        cell.preservesSuperviewLayoutMargins = false
+        cell.separatorInset = UIEdgeInsets.zero
+        cell.layoutMargins = UIEdgeInsets.zero
         return cell
     }
     

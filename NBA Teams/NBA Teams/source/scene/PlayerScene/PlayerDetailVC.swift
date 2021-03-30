@@ -1,19 +1,20 @@
 //
-//  TeamDetailViewController.swift
+//  PlayerDetailVC.swift
 //  NBA Teams
 //
-//  Created by Oscar Ceretti on 29/03/2021.
+//  Created by Oscar Ceretti on 30/03/2021.
 //
 
 import Foundation
+import Foundation
 import UIKit
 
-class TeamDetailViewController: UIViewController {
+class PlayerDetailViewController: UIViewController {
     
-    private let viewModel: TeamDetailViewModel
-    private let router: TeamDetailRouter
+    private let viewModel: PlayerDetailViewModel
+    private let router: PlayerDetailRouter
    
-    private var mainView = TeamDetailView(frame: .zero)
+    private var mainView = PlayerDetailView(frame: .zero)
     
     
 
@@ -25,11 +26,10 @@ class TeamDetailViewController: UIViewController {
         
     }
     
-    init(viewModel: TeamDetailViewModel, router: TeamDetailRouter) {
+    init(viewModel: PlayerDetailViewModel, router: PlayerDetailRouter) {
         self.viewModel = viewModel
         self.router = router
         super.init(nibName: nil, bundle: nil)
-        self.mainView.viewDelegate = self
         setLayout()
     }
     
@@ -68,8 +68,8 @@ class TeamDetailViewController: UIViewController {
                 }
             }
         }
-        self.viewModel.bindPlayersViewModelToController = { [weak self] players in
-            self?.mainView.datasource.append(contentsOf: players)
+        self.viewModel.bindPlayerViewModelToController = { [weak self] player in
+            self?.mainView.datasource.append(contentsOf: player)
             DispatchQueue.main.async {
                 self?.mainView.reloadData()
             }
@@ -102,15 +102,4 @@ class TeamDetailViewController: UIViewController {
     
 }
 
-extension TeamDetailViewController: TeamDetailViewDelegate {
-    func openPlayerDetail(playerName: String) {
-        self.router.openPlayerDetail(from: self, name: playerName)
-    }
-    
-    func askForMore() {
-        self.viewModel.requestPlayersList()
-    }
-    
-    
-}
 

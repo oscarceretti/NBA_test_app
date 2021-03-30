@@ -9,6 +9,7 @@ import Foundation
 struct Constants {
     struct urlPath {
         static let TEAMS_LIST = "https://free-nba.p.rapidapi.com/teams"
+        static let PLAYER_API = "https://free-nba.p.rapidapi.com/players"
     }
     
     static let headers = [

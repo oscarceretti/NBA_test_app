@@ -63,8 +63,10 @@ class PlayerDetailViewController: UIViewController {
             DispatchQueue.main.async {
                 if loading {
                     self?.activityIndicator.startAnimating()
+                    self?.mainView.isUserInteractionEnabled = false
                 } else {
                     self?.activityIndicator.stopAnimating()
+                    self?.mainView.isUserInteractionEnabled = true
                 }
             }
         }
